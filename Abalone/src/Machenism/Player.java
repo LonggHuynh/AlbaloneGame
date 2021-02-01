@@ -114,7 +114,7 @@ public class Player {
 	 * @ensures ready ==true
 	 */
 	public synchronized String setReady() {
-		if (this.ready == true) {
+		if (this.ready) {
 			return ProtocolMessages.E_ALREADY_READY;
 		}
 		this.ready = true;
@@ -127,7 +127,7 @@ public class Player {
 	 * @return true if player is ready, otherwise fasle
 	 */
 	public boolean readyCheck() {
-		return ready == true;
+		return ready;
 	}
 
 	/**

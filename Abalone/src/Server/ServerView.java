@@ -16,7 +16,7 @@ public class ServerView extends Thread {
 	private Server srv;
 
 	/**
-	 * server socker
+	 * server socket
 	 */
 	ServerSocket sock;
 
@@ -28,7 +28,7 @@ public class ServerView extends Thread {
 	/**
 	 * setup for server
 	 */
-	public void intialize() {
+	public void initialize() {
 		boolean again = true;
 		while (again) {
 			try {
@@ -59,7 +59,7 @@ public class ServerView extends Thread {
 	}
 
 	public void run() {
-		intialize();
+		initialize();
 		while (true) {
 			Socket socket;
 			try {
@@ -73,7 +73,7 @@ public class ServerView extends Thread {
 				if (!getBoolean("Do you want to try again ?")) {
 					break;
 				}
-				intialize();
+				initialize();
 			}
 
 		}
@@ -99,22 +99,7 @@ public class ServerView extends Thread {
 	public int getInt(String question) {
 		showMessage(question);
 		Scanner scan = new Scanner(System.in);
-		int i = scan.nextInt();
-		return i;
-	}
-
-	/**
-	 * Ask the user to input answer for the given question
-	 * 
-	 * @param question question asked user
-	 * @return user input
-	 */
-	public String getString(String question) {
-		showMessage(question);
-		Scanner scan = new Scanner(System.in);
-		String i = scan.nextLine();
-		return i;
-
+		return scan.nextInt();
 	}
 
 	/**
@@ -127,10 +112,7 @@ public class ServerView extends Thread {
 		showMessage(question + "y/n?");
 		Scanner scan = new Scanner(System.in);
 		String i = scan.next();
-		if (i.equals("y")) {
-			return true;
-		}
-		return false;
+		return i.equals("y");
 	}
 
 	public static void main(String[] args) {

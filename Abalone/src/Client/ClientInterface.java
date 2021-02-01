@@ -16,7 +16,7 @@ public interface ClientInterface {
 	/**
 	 * creates a new board
 	 * 
-	 * @requires nrPlayer &lt; 5 && nrPlayer &gt;
+	 * @requires nrPlayer &lt; 5 && nrPlayer &gt -1;
 	 * @param nrPlayer number of players
 	 */
 
@@ -103,7 +103,7 @@ public interface ClientInterface {
 	/**
 	 * handle get players info request
 	 */
-	public void handlePlayerdata();
+	public void handlePlayers();
 
 	/**
 	 * handle the join ready from players

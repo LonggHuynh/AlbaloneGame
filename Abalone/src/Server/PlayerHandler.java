@@ -43,7 +43,7 @@ public class PlayerHandler extends Thread {
 	 * Get the destination of output
 	 * 
 	 * @return writter of this
-	 * @ensure \result!=null
+	 * @ensures \result!=null
 	 */
 	public PrintWriter getWriter() {
 		return out;

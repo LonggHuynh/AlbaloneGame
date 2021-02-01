@@ -1,18 +1,17 @@
 package Machenism;
 
 import java.util.ArrayList;
+import Server.ProtocolMessages;
 
 /**
  * Class representing the abalone game
  */
 
-import Server.ProtocolMessages;
-
 public class Game {
 	/**
 	 * list of the players in the game
 	 */
-	private ArrayList<Player> players;
+	private final ArrayList<Player> players;
 	/**
 	 * the board of the game
 	 */
@@ -29,9 +28,7 @@ public class Game {
 	 * 
 	 * 
 	 */
-
-	private String password;
-
+	private final String password;
 	/**
 	 * The number of remaining turns before the game ends
 	 * 
@@ -44,7 +41,7 @@ public class Game {
 	 * 
 	 * @invariant name!=null
 	 */
-	private String name;
+	private final String name;
 
 	/**
 	 * The start status of the game, true if the game is in progress
@@ -56,12 +53,7 @@ public class Game {
 	 * 
 	 * @invariant capacity<5 &capacity >0
 	 */
-	private int capacity;
-
-	/**
-	 * set of marks/colors used in the game, according to capacity
-	 */
-	private Mark[] marks = { Mark.Y, Mark.W, Mark.B, Mark.R };
+	private final int capacity;
 
 	public Game(int capacity, String name, String password) {
 		String hashedPassword = Password.getHashPassword(password);
@@ -83,10 +75,10 @@ public class Game {
 	}
 
 	/**
-	 * @return string representation of the player's information
+	 * @return string representation of the game's information
 	 */
 	public String toString() {
-		return "" + name + "," + players.size() + "," + capacity + "," + (password != "");
+		return "" + name + "," + players.size() + "," + capacity + "," + (!password.equals(""));
 	}
 
 	// returns game name
@@ -131,18 +123,16 @@ public class Game {
 	 */
 	public synchronized void setStart() {
 		board = new Board(capacity);
+		Mark[] marks;
 		if (capacity == 2) {
-			Mark[] colors = { Mark.Y, Mark.W };
 
-			marks = colors;
+			marks = new Mark[]{ Mark.Y, Mark.W };
 		} else if (capacity == 3) {
-			Mark[] colors = { Mark.W, Mark.Y, Mark.R };
 
-			marks = colors;
+			marks = new Mark[]{ Mark.W, Mark.Y, Mark.R };
 		} else {
-			Mark[] colors = { Mark.Y, Mark.B, Mark.W, Mark.R };
 
-			marks = colors;
+			marks = new Mark[]{ Mark.Y, Mark.B, Mark.W, Mark.R };
 		}
 
 		for (int i = 0; i < marks.length; i++) {
@@ -273,7 +263,7 @@ public class Game {
 
 	/**
 	 * @requires password != null
-	 * @param password
+	 * @param password password to be checked
 	 * @return true if password == this.password
 	 */
 	public boolean checkPass(String password) {
@@ -324,9 +314,6 @@ public class Game {
 			return "";
 		}
 		if (players.get(current) != p) {
-			if (current > players.size()) {
-				return null;
-			}
 			return ProtocolMessages.E_NOT_YOUR_TURN;
 		} else {
 			try {

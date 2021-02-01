@@ -173,7 +173,7 @@ public class Client implements ClientInterface {
 	}
 
 	@Override
-	public void handlePlayerdata() {
+	public void handlePlayers() {
 		sendMsg(ProtocolMessages.GETPLAYERS);
 	}
 
@@ -237,14 +237,19 @@ public class Client implements ClientInterface {
 
 	public Mark convertToMark(String m) {
 		Mark mark;
-		if (m.equals("Y")) {
-			mark = Mark.Y;
-		} else if (m.equals("R")) {
-			mark = Mark.R;
-		} else if (m.equals("B")) {
-			mark = Mark.B;
-		} else {
-			mark = Mark.W;
+		switch (m) {
+			case "Y":
+				mark = Mark.Y;
+				break;
+			case "R":
+				mark = Mark.R;
+				break;
+			case "B":
+				mark = Mark.B;
+				break;
+			default:
+				mark = Mark.W;
+				break;
 		}
 		return mark;
 	}

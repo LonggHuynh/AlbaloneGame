@@ -26,13 +26,9 @@ public class ClientView extends Thread {
 	 */
 
 	public static final String ANSI_RESET = "\u001B[0m";
-	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_GREEN = "\u001B[32m";
 	public static final String ANSI_YELLOW = "\u001B[33m";
 	public static final String ANSI_BLUE = "\u001B[34m";
-	public static final String ANSI_PURPLE = "\u001B[35m";
-	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
 
 	/**
@@ -43,7 +39,7 @@ public class ClientView extends Thread {
 	/**
 	 * Writer for the view
 	 */
-	private PrintWriter console = new PrintWriter(System.out, true);
+	private final PrintWriter console = new PrintWriter(System.out, true);
 
 	/**
 	 * intialize the server
@@ -122,7 +118,7 @@ public class ClientView extends Thread {
 			console.println(e.getMessage());
 		} catch (SocketException e) {
 			console.println("Connection error! Closing...");
-		} catch (IOException e) {
+		} catch (IOException ignored) {
 
 		}
 
@@ -180,49 +176,62 @@ public class ClientView extends Thread {
 	 * @throws ExitProgram
 	 */
 	public void handleInput(String command) throws ExitProgram {
-		Scanner scan = new Scanner(System.in);
-		if (command.equals(ProtocolMessages.MOVE)) {
-			String mar1 = getString("Select marble 1");
-			String mar2 = getString("Select marble 2");
-			String mar3 = getString("Select marble 3");
-			String dir = getString("Select direction");
-			client.handleMove("move:" + mar1 + ":" + mar2 + ":" + mar3 + ":" + dir);
-		} else if (command.equals(ProtocolMessages.READY)) {
-			client.handleReady();
-		} else if (command.equals(ProtocolMessages.LIST)) {
-			client.handleList();
-		} else if (command.equals(ProtocolMessages.CREATE)) {
-			String roomname = getString("Room name?");
-			String password = getString("Password?");
-			String capacity = getString("Capacity?");
-			client.handlCreate(roomname + ":" + password + ":" + capacity);
-		} else if (command.equals(ProtocolMessages.JOIN)) {
-			client.sendMessege(ProtocolMessages.LIST);
-			try {
-				Thread.sleep(200);
-				// Make sure the room of list shown first
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		switch (command) {
+			case ProtocolMessages.MOVE:
+				String mar1 = getString("Select marble 1");
+				String mar2 = getString("Select marble 2");
+				String mar3 = getString("Select marble 3");
+				String dir = getString("Select direction");
+				client.handleMove("move:" + mar1 + ":" + mar2 + ":" + mar3 + ":" + dir);
+				break;
+			case ProtocolMessages.READY:
+				client.handleReady();
+				break;
+			case ProtocolMessages.LIST:
+				client.handleList();
+				break;
+			case ProtocolMessages.CREATE: {
+				String roomname = getString("Room name?");
+				String password = getString("Password?");
+				String capacity = getString("Capacity?");
+				client.handlCreate(roomname + ":" + password + ":" + capacity);
+				break;
 			}
-			String roomname = getString("Enter room name");
-			client.setRoomName(roomname);
-			String password = getString("Enter password");
-			client.handleJoin(roomname + ":" + password);
-		} else if (command.equals(ProtocolMessages.GETPLAYERS)) {
-			client.handlePlayerdata();
-		} else if (command.equals(ProtocolMessages.QUIT)) {
-			client.handleQuit();
-		} else if (command.equals(ProtocolMessages.SAY)) {
-			String msg = getString("Enter Messages");
-			client.handleSay(msg);
-		} else if (command.equals(ProtocolMessages.DISCONNECT)) {
-			if (!getBoolean("Do you want to continue?")) {
-				client.handleDis();
+			case ProtocolMessages.JOIN: {
+				client.sendMessege(ProtocolMessages.LIST);
+				try {
+					Thread.sleep(200);
+					// Make sure the room of list shown first
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				String roomname = getString("Enter room name");
+				client.setRoomName(roomname);
+				String password = getString("Enter password");
+				client.handleJoin(roomname + ":" + password);
+				break;
 			}
-		} else if (command.equals("help")) {
-			printMenu();
-		} else {
-			showMessage("Unknown command");
+			case ProtocolMessages.GETPLAYERS:
+				client.handlePlayers();
+				break;
+			case ProtocolMessages.QUIT:
+				client.handleQuit();
+				break;
+			case ProtocolMessages.SAY:
+				String msg = getString("Enter Messages");
+				client.handleSay(msg);
+				break;
+			case ProtocolMessages.DISCONNECT:
+				if (!getBoolean("Do you want to continue?")) {
+					client.handleDis();
+				}
+				break;
+			case "help":
+				printMenu();
+				break;
+			default:
+				showMessage("Unknown command");
+				break;
 		}
 
 	}
@@ -236,8 +245,7 @@ public class ClientView extends Thread {
 	public String getString(String question) {
 		showMessage(question);
 		Scanner scan = new Scanner(System.in);
-		String i = scan.nextLine();
-		return i;
+		return scan.nextLine();
 
 	}
 
@@ -252,10 +260,7 @@ public class ClientView extends Thread {
 		showMessage(question + "y/n?");
 		Scanner scan = new Scanner(System.in);
 		String i = scan.next();
-		if (i.equals("y")) {
-			return true;
-		}
-		return false;
+		return i.equals("y");
 	}
 
 	/**
@@ -268,8 +273,7 @@ public class ClientView extends Thread {
 	public int getInt(String question) {
 		showMessage(question);
 		Scanner scan = new Scanner(System.in);
-		int i = scan.nextInt();
-		return i;
+		return scan.nextInt();
 	}
 
 	// -----------------------main------------------------//

@@ -14,7 +14,7 @@ public class Password {
 	/**
 	 * Encrypts password
 	 * 
-	 * @param1 pass
+	 * @param pass password to be hashed
 	 * @requires pass != null
 	 * @return string representation as encrypted
 	 */

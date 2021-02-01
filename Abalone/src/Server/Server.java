@@ -1,39 +1,33 @@
 package Server;
 
-import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.List;
-
 import Machenism.Game;
 import Machenism.Player;
 
-public class Server extends Thread implements Srv {
+import java.util.ArrayList;
+import java.util.List;
 
-	/**
-	 * serversocket
-	 */
-	private ServerSocket ssock;
+public class Server extends Thread implements Srv {
 
 	/**
 	 * hander list of the server
 	 * 
 	 * @requires handlerList!=null
 	 */
-	private List<PlayerHandler> handlerList;
+	private final List<PlayerHandler> handlerList;
 
 	/**
 	 * list of players currently using the server
 	 * 
 	 * @requires players!=null
 	 */
-	private List<Player> players;
+	private final List<Player> players;
 
 	/**
 	 * list of games created by players
 	 * 
 	 * @requires games!=null
 	 */
-	private List<Game> games;
+	private final List<Game> games;
 
 	/**
 	 * Server view
@@ -49,7 +43,7 @@ public class Server extends Thread implements Srv {
 		players = new ArrayList<>();
 		handlerList = new ArrayList<>();
 		this.view = view;
-		games = new ArrayList<Game>();
+		games = new ArrayList<>();
 	}
 
 	/**
@@ -78,15 +72,6 @@ public class Server extends Thread implements Srv {
 	 */
 	public List<PlayerHandler> handlerList() {
 		return handlerList;
-	}
-
-	/**
-	 * Get the list of games
-	 * @ensures \result!=null
-	 * @return list of games
-	 */
-	public List<Game> getGames() {
-		return games;
 	}
 
 	@Override
@@ -154,11 +139,11 @@ public class Server extends Thread implements Srv {
 
 	@Override
 	public synchronized String listRoom() {
-		String res = ProtocolMessages.ROOMS;
+		StringBuilder res = new StringBuilder(ProtocolMessages.ROOMS);
 		for (Game g : games) {
-			res += ":" + g.toString();
+			res.append(":").append(g.toString());
 		}
-		return res;
+		return res.toString();
 	}
 
 	@Override
@@ -346,15 +331,6 @@ public class Server extends Thread implements Srv {
 
 		}
 		g.reset();
-	}
-
-	/**
-	 * Give the list of players using the server
-	 * 
-	 * @return the list of players
-	 */
-	public List<Player> getPlayers() {
-		return players;
 	}
 
 }

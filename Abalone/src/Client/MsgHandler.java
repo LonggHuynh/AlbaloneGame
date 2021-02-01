@@ -29,7 +29,7 @@ public class MsgHandler extends Thread {
 	 * 
 	 * @param in  the destination of the incomming stream
 	 * @param out the destination of the outgoing stream
-	 * @client the client using the this handler
+	 * @param client the client using the this handler
 	 * 
 	 */
 
@@ -107,7 +107,6 @@ public class MsgHandler extends Thread {
 		if (client.getSupportLevel() == 0) {
 			return;
 		}
-		String s = client.getBoard().toString();
 		Board b = client.getBoard();
 		Mega = client.getAI();
 		Mega.bestMove(b, client.getMark());
@@ -133,7 +132,6 @@ public class MsgHandler extends Thread {
 	public void handleMove(String move) {
 		client.getView().showMessage(move);
 		client.makeMove(move);
-		String s = client.getBoard().toString();
 		client.getView().showMessage(client.printBoard());
 	}
 

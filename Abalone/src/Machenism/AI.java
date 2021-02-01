@@ -38,7 +38,7 @@ public class AI {
 
 		Set<String> movingDirectionset;
 		// because the different rules for game of 2,3 and game of 4 players, using 3
-		// direction set for game of 2 and 3 will reduce the selection, and thus bo the
+		// direction set for game of 2 and 3 will reduce the selection, and thus the
 		// performance
 		if (board.getNrPLayer() == 4) {
 			movingDirectionset = Board.DIRECTION_SET;
@@ -68,7 +68,6 @@ public class AI {
 
 		// choice of 2,3 balls
 		for (int p : pos) {
-
 			for (String lineDir : movingDirectionset) {
 				int inLinePos = board.posOf(p, lineDir);
 				int inLinePos3 = board.posOf(inLinePos, lineDir);
@@ -240,7 +239,7 @@ public class AI {
 				Board futureBoard = board.deepCopy();
 
 				if (futureBoard.validGetScore(m, mark)) {
-					// 0.0001*depth is the priority of the move, e.g. is the AI calculate they will
+					// 0.0001*depth is the priority of the move, e.g. if the AI calculates they will
 					// get score in the second move and they will get the score in first move, it
 					// will take the first move
 					s += 1 + 0.0001 * depth;
